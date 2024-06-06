@@ -1,0 +1,751 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Swadista Organic Store",
+    "description": "This is a sample API for Oraganic store.",
+    "version": "1.0.0"
+  },
+
+  "tags": [
+    { "name": "Login" },
+    { "name": "Signup" },
+    { "name": "User Management Profile" },
+    { "name": "User Management Address" }
+  ],
+  "paths": {
+    "/api/v1/users/get_profile_all": {
+      "get": {
+        "tags": ["User Management Profile"],
+        "summary": "Get all users",
+        "description": "Retrieve a list of all users.",
+        "responses": {
+          "200": {
+            "description": "A list of users.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/profile"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/profile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/get_profile=ID": {
+      "get": {
+        "tags": ["User Management Profile"],
+        "summary": "Get single users",
+        "description": "Retrieve a single users.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:You will get single user details",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "A list of users.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/profile"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/profile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    
+    "/api/v1/users/delete_profile=ID": {
+      "delete": {
+        "tags": ["User Management Profile"],
+        "summary": "Delete user",
+        "description": "Delete user by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:Delete user details",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "User details Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/profile"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/profile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/users/update_profile=ID": {
+      "patch": {
+        "tags": ["User Management Profile"],
+        "summary": "Update user",
+        "description": "Update user by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:Update user details",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/profile"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/profile"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User details Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/profile"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/profile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/api/v1/users/address/get_address": {
+      "get": {
+        "tags": ["User Management Address"],
+        "summary": "Get all users address",
+        "description": "Retrieve a list of all users.",
+        "responses": {
+          "200": {
+            "description": "A list of users.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/address"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/address"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/address/get_address=ID": {
+      "get": {
+        "tags": ["User Management Address"],
+        "summary": "Get single users address",
+        "description": "Retrieve a single users address",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:You will get single user address details with id",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "A list of users address.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/address"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/address"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/users/address/delete_address=ID": {
+      "delete": {
+        "tags": ["User Management Address"],
+        "summary": "Delete user address",
+        "description": "Delete user by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:You will get single user address details with id",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "User details Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/address"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/address"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/api/v1/users/address/post_address": {
+      "post": {
+        "tags": ["User Management Address"],
+        "summary": "Craete user address",
+        "description": "Craete user by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:You will get single user address details with id",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/address"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/address"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User details Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/address"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/address"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/api/v1/users/address/get_single_address=aid": {
+      "get": {
+        "tags": ["User Management Address"],
+        "summary": "Get single users address with addressId",
+        "description": "Retrieve a single users address with addressId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:You will get single user address details with id",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          },
+          {
+            "name": "addressid",
+            "in": "query",
+            "description": "Id:You will get single user address details with addressId",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "A list of users address with addressId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/address"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/address"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/users/address/delete_single_address=aid": {
+      "delete": {
+        "tags": ["User Management Address"],
+        "summary": "Delete user address with addressId",
+        "description": "Delete user address with addressId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:You will delete single user address details with id",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          },
+          {
+            "name": "addressid",
+            "in": "query",
+            "description": "Id:You will delete user address details with addressId",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "User details Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/address"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/address"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/users/address/update_single_address=aid": {
+      "patch": {
+        "tags": ["User Management Address"],
+        "summary": "Update user address with adressId",
+        "description": "Update user by adressId.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:You will update user address details with id",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          },
+          {
+            "name": "addressid",
+            "in": "query",
+            "description": "Id:You will update user address details with addressId",
+            "required": true,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/address"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/address"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User details Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/address"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/address"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/api/v1/users/signup": {
+      "post": {
+        "tags": ["Signup"],
+        "summary": "Create a new user",
+        "description": "Create a new user with email and phone number.",
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/signup"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/signup"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/signup"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/signup"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or phone number already exists"
+          }
+        }
+      }
+    },
+
+    "/api/v1/users/login": {
+      "post": {
+        "tags": ["Login"],
+        "summary": "Login a user",
+        "description": "Login user with email and phone number.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/login"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/login"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or phone number already exists"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "signup": {
+        "type": "object",
+        "required": [
+          "email",
+          "phone_number",
+          "password",
+          "first_name",
+          "first_name"
+        ],
+
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "The user's first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "The user's last name"
+          },
+          "email": {
+            "type": "string",
+            "description": "The user's email address"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "The user's phone number"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password"
+          }
+        }
+      },
+      "profile": {
+        "type": "object",
+        "required": [
+          "email",
+          "phone_number",
+          "password",
+          "first_name",
+          "first_name"
+        ],
+
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "The user's first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "The user's last name"
+          },
+          "email": {
+            "type": "string",
+            "description": "The user's email address"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "The user's phone number"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password"
+          }
+        }
+      },
+      "login": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The user's email address"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "The user's phone number"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password"
+          }
+        }
+      },
+      "address": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "int",
+            "description": "Same Id what is given in Param query"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "The First Name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "The LAst Name"
+          },
+          "email_address": {
+            "type": "string",
+            "description": "The user's email address"
+          },
+          "mobile": {
+            "type": "string",
+            "description": "The Mobile Details"
+          },
+          "locality": {
+            "type": "string",
+            "description": "The Locality Details"
+          },
+          "postcode_zip": {
+            "type": "string",
+            "description": "The Postcode zip Details"
+          },
+          "state": {
+            "type": "string",
+            "description": "The State Details"
+          },
+          "country": {
+            "type": "string",
+            "description": "The Country Details"
+          },
+          "town_city": {
+            "type": "string",
+            "description": "The Town City Details"
+          },
+          "address_optional": {
+            "type": "string",
+            "description": "The Optional Address Details"
+          }
+        }
+      }
+    }
+  }
+}

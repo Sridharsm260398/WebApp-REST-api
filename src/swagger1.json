@@ -1,0 +1,1268 @@
+" /api/v1/users/create_profile": {
+      "post": {
+        "tags": ["User Management Profile"],
+        "summary": "Create user profile for existing user",
+        "description": "Create user profile.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id:You will get single user details",
+            "required": false,
+            "schema": { "maxLength": 12, "minLength": 1, "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/profile"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/profile"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created user profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/profile"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/profile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+{ "parameters": [
+  {
+    "name": "loginId",
+    "in": "query",
+    "description": "Enter loginID",
+    "required": false,
+    "schema": { "type": "string" }
+  },
+  {
+    "Authcode": "AuthCode",
+    "in": "query",
+    "description": "Only Number",
+    "required": false,
+    "schema": { "type": "integer", "format": "int32", "default": 22 }
+  },
+  {
+    "name": "Language",
+    "in": "query",
+    "description": "Characters",
+    "required": false,
+    "schema": { "type": "integer", "format": "int32", "default": 1 }
+  }
+],
+  "openapi": "3.0.1",
+  "info": {
+    "title": "BaNCS Rest Webservices Documentation",
+    "description": "Please find the list of APIs exposed from Rest Tool as RESTful webservices",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://172.21.163.224:19501/Bancsapi",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [{ "name": "Limit Management" }, { "name": "User Management" }],
+  "paths": {
+    "/usermanagement/suspenduser": {
+      "post": {
+        "tags": ["User Management"],
+        "summary": "Suspend User with  Login ID",
+        "description": "suspendUser",
+        "operationId": "suspendUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SuspendUser_Resource" }
+            },
+            "application/xml": {
+              "schema": { "$ref": "#/components/schemas/SuspendUser_Resource" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "There has been an internal error at the server."
+          },
+          "404": { "description": "Requested service is not found." },
+          "200": {
+            "description": "Request is successfully Executed. Please view the response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuspendUser_Response"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuspendUser_Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "API has not been able to process the request.Please check the response for errors and correct the request.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usermanagement/resumeuser": {
+      "post": {
+        "tags": ["User Management"],
+        "summary": "Resume User  with  Login ID",
+        "description": "resumeUser",
+        "operationId": "resumeUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ResumeUser_Resource" }
+            },
+            "application/xml": {
+              "schema": { "$ref": "#/components/schemas/ResumeUser_Resource" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "There has been an internal error at the server."
+          },
+          "404": { "description": "Requested service is not found." },
+          "200": {
+            "description": "Request is successfully Executed. Please view the response.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ResumeUser_Response" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ResumeUser_Response" }
+              }
+            }
+          },
+          "400": {
+            "description": "API has not been able to process the request.Please check the response for errors and correct the request.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usermanagement/modifyuserwithdlink": {
+      "post": {
+        "tags": ["User Management"],
+        "summary": "Modify User / Link - Delink User with User Group - Role",
+        "description": "modifyUserWithDlink",
+        "operationId": "modifyUserWithDlink_POST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ModifyUser_Resource" }
+            },
+            "application/xml": {
+              "schema": { "$ref": "#/components/schemas/ModifyUser_Resource" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "There has been an internal error at the server."
+          },
+          "404": { "description": "Requested service is not found." },
+          "200": {
+            "description": "Request is successfully Executed. Please view the response.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ModifyUser_Response" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ModifyUser_Response" }
+              }
+            }
+          },
+          "400": {
+            "description": "API has not been able to process the request.Please check the response for errors and correct the request.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usermanagement/deleteuser": {
+      "post": {
+        "tags": ["User Management"],
+        "summary": "Delete User with Login ID",
+        "description": "deleteUser",
+        "operationId": "deleteActiveUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/DeleteUser_Resource" }
+            },
+            "application/xml": {
+              "schema": { "$ref": "#/components/schemas/DeleteUser_Resource" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DeleteUser_Response" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/DeleteUser_Response" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usermanagement/createuser": {
+      "post": {
+        "tags": ["User Management"],
+        "summary": "Create User",
+        "description": "createUser",
+        "operationId": "createActiveUser_POST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateUser_Resource" }
+            },
+            "application/xml": {
+              "schema": { "$ref": "#/components/schemas/CreateUser_Resource" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "There has been an internal error at the server."
+          },
+          "404": { "description": "Requested service is not found." },
+          "200": {
+            "description": "Request is successfully Executed. Please view the response.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreateUser_Response" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/CreateUser_Response" }
+              }
+            }
+          },
+          "400": {
+            "description": "API has not been able to process the request.Please check the response for errors and correct the request.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/limitmanagement/managecustomerprofile": {
+      "post": {
+        "tags": ["Limit Management"],
+        "summary": "Manage Customer Agreement",
+        "description": "PPBT0307CustAgrmtCrt",
+        "operationId": "PPBT0307CustAgrmtCrt",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PP_CUSTOMER_AGRMNT_PPBT0307CustAgrmtCrt_Resource"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/PP_CUSTOMER_AGRMNT_PPBT0307CustAgrmtCrt_Resource"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "There has been an internal error at the server."
+          },
+          "404": { "description": "Requested service is not found." },
+          "200": {
+            "description": "Request is successfully Executed. Please view the response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PP_CUSTOMER_AGRMNT_PPBT0307CustAgrmtCrt_WrappedResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PP_CUSTOMER_AGRMNT_PPBT0307CustAgrmtCrt_WrappedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "API has not been able to process the request.Please check the response for errors and correct the request.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/limitmanagement/limitenquirydaterange": {
+      "post": {
+        "tags": ["Limit Management"],
+        "summary": "Limit Utilization Enquiry",
+        "description": "This API return the Limit and Utilization status for the given date range",
+        "operationId": "PPET0312LmtUtlztnEnqry",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PP_LMT_UTLZTN_DTLS_PPET0312LmtUtlztnEnqry_Resource"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/PP_LMT_UTLZTN_DTLS_PPET0312LmtUtlztnEnqry_Resource"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "There has been an internal error at the server."
+          },
+          "404": { "description": "Requested service is not found." },
+          "200": {
+            "description": "Request is successfully Executed. Please view the response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PP_LMT_UTLZTN_DTLS_PPET0312LmtUtlztnEnqry_WrappedResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PP_LMT_UTLZTN_DTLS_PPET0312LmtUtlztnEnqry_WrappedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "API has not been able to process the request.Please check the response for errors and correct the request.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/limitmanagement/limitCheck": {
+      "post": {
+        "tags": ["Limit Management"],
+        "summary": "Limit Check API",
+        "description": "This API identify predefine limits and calculate whether the customer exceeded their predefined per transaction.",
+        "operationId": "PPBT0305VALPELmtUtilization",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PP_LMT_DTLS_PPBT0305VALPELmtUtilization_Resource"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/PP_LMT_DTLS_PPBT0305VALPELmtUtilization_Resource"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "There has been an internal error at the server."
+          },
+          "404": { "description": "Requested service is not found." },
+          "200": {
+            "description": "Request is successfully Executed. Please view the response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PP_LMT_DTLS_PPBT0305VALPELmtUtilization_WrappedResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PP_LMT_DTLS_PPBT0305VALPELmtUtilization_WrappedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "API has not been able to process the request.Please check the response for errors and correct the request.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usermanagement/viewuser": {
+      "get": {
+        "tags": ["User Management"],
+        "summary": "View User List/View User Details with  Login ID",
+        "description": "viewUser",
+        "operationId": "viewUser",
+        "parameters": [
+          {
+            "name": "loginId",
+            "in": "query",
+            "description": "Login Id: You may leave it blank to get details of all the users in the system",
+            "required": false,
+            "schema": { "maxLength": 12, "minLength": 3, "type": "string" },
+            "example": "_NS_"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of records fetched per page e.g. 22 records per page ",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 22 },
+            "example": 22
+          },
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "The existing page number e.g. 2 can be read as 2 of 10 pages. ",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 1 },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "There has been an internal error at the server."
+          },
+          "404": { "description": "Requested service is not found." },
+          "200": {
+            "description": "Request is successfully Executed. Please view the response.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ViewUser_Response" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ViewUser_Response" }
+              }
+            }
+          },
+          "400": {
+            "description": "API has not been able to process the request.Please check the response for errors and correct the request.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ErrorDetails" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usermanagement/viewrole": {
+      "get": {
+        "tags": ["User Management"],
+        "summary": "View Role List/View Role with Role ID",
+        "description": "viewRole",
+        "operationId": "viewRole",
+        "parameters": [
+          {
+            "name": "RoleId",
+            "in": "query",
+            "description": "Role Id: You may leave it blank to get details of all the roles in the system",
+            "required": false,
+            "schema": { "maxLength": 3, "minLength": 0, "type": "string" },
+            "example": "_NS_"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ViewRole_Response" }
+              },
+              "application/xml": {
+                "schema": { "$ref": "#/components/schemas/ViewRole_Response" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SUSPEND_USER": {
+        "required": ["loginId"],
+        "type": "object",
+        "properties": {
+          "loginId": {
+            "maxLength": 12,
+            "minLength": 3,
+            "pattern": "[^[a-zA-Z0-9-]+$]",
+            "type": "string",
+            "description": "Specify the login Id of the user to be suspended",
+            "example": "_NS_"
+          }
+        },
+        "description": "SUSPEND_USER"
+      },
+      "SuspendUser_Resource": {
+        "required": ["SUSPEND_USER"],
+        "type": "object",
+        "properties": {
+          "SUSPEND_USER": { "$ref": "#/components/schemas/SUSPEND_USER" }
+        }
+      },
+      "CustomErrorArchInput": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Error Id",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "description": "Error Description"
+          },
+          "severityCode": {
+            "type": "integer",
+            "description": " Error Severity Code",
+            "format": "int32"
+          }
+        },
+        "description": "List of Business Errors"
+      },
+      "ErrorDetails": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code",
+            "format": "int32"
+          },
+          "errorMsg": {
+            "type": "string",
+            "description": "HTTP error status meassage"
+          },
+          "maxSeverityCode": {
+            "type": "integer",
+            "description": "Max Error Severity Code",
+            "format": "int32"
+          },
+          "errorMessageList": {
+            "type": "array",
+            "description": "List of Business Errors",
+            "items": { "$ref": "#/components/schemas/CustomErrorArchInput" }
+          }
+        }
+      },
+      "SuspendUser_Response": { "type": "object" },
+      "RESUME_USER": {
+        "required": ["loginId"],
+        "type": "object",
+        "properties": {
+          "loginId": {
+            "maxLength": 12,
+            "minLength": 3,
+            "pattern": "[^[a-zA-Z0-9-]+$]",
+            "type": "string",
+            "description": "Specify the login Id of the user to be resumed",
+            "example": "_NS_"
+          }
+        },
+        "description": "RESUME_USER"
+      },
+      "ResumeUser_Resource": {
+        "required": ["RESUME_USER"],
+        "type": "object",
+        "properties": {
+          "RESUME_USER": { "$ref": "#/components/schemas/RESUME_USER" }
+        }
+      },
+      "ResumeUser_Response": { "type": "object" },
+      "MODIFY_USER": {
+        "required": ["flag", "loginId", "roleId"],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "firstName",
+            "example": "_NS_"
+          },
+          "lastName": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "lastName",
+            "example": "_NS_"
+          },
+          "loginId": {
+            "maxLength": 12,
+            "minLength": 3,
+            "pattern": "[^[a-zA-Z0-9-]+$]",
+            "type": "string",
+            "description": "loginId",
+            "example": "_NS_"
+          },
+          "roleId": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string",
+            "description": "roleId",
+            "example": "_NS_"
+          },
+          "flag": {
+            "maxLength": 1,
+            "minLength": 1,
+            "pattern": "[^(A|D|U)$]",
+            "type": "string",
+            "description": "flag",
+            "example": "_NS_"
+          }
+        },
+        "description": "MODIFY_USER"
+      },
+      "ModifyUser_Resource": {
+        "required": ["MODIFY_USER"],
+        "type": "object",
+        "properties": {
+          "MODIFY_USER": { "$ref": "#/components/schemas/MODIFY_USER" }
+        }
+      },
+      "ModifyUser_Response": { "type": "object" },
+      "DELETE_USER": {
+        "required": ["loginId"],
+        "type": "object",
+        "properties": {
+          "loginId": {
+            "maxLength": 12,
+            "minLength": 3,
+            "pattern": "[^[a-zA-Z0-9-]+$]",
+            "type": "string",
+            "description": "Specify the login Id of the user to be deleted",
+            "example": "_NS_"
+          }
+        },
+        "description": "DELETE_USER"
+      },
+      "DeleteUser_Resource": {
+        "required": ["DELETE_USER"],
+        "type": "object",
+        "properties": {
+          "DELETE_USER": { "$ref": "#/components/schemas/DELETE_USER" }
+        }
+      },
+      "DeleteUser_Response": { "type": "object" },
+      "CreateUser_Resource": {
+        "required": ["USER_PROFILE"],
+        "type": "object",
+        "properties": {
+          "USER_PROFILE": { "$ref": "#/components/schemas/USER_PROFILE" }
+        }
+      },
+      "USER_PROFILE": {
+        "required": ["firstName", "lastName", "loginId", "roleId", "startDt"],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "maxLength": 30,
+            "minLength": 1,
+            "pattern": "null",
+            "type": "string",
+            "description": "First Name of the User",
+            "example": "_NS_"
+          },
+          "lastName": {
+            "maxLength": 30,
+            "minLength": 1,
+            "pattern": "null",
+            "type": "string",
+            "description": "Last Name of the User",
+            "example": "_NS_"
+          },
+          "loginId": {
+            "maxLength": 12,
+            "minLength": 3,
+            "pattern": "[^[a-zA-Z0-9-]+$]",
+            "type": "string",
+            "description": "Login ID of the User",
+            "example": "_NS_"
+          },
+          "startDt": {
+            "maxLength": 8,
+            "minLength": 8,
+            "pattern": "null",
+            "type": "string",
+            "description": "Date from which user will be active. This must be today or a future date in YYYYMMDD format.",
+            "example": "_NS_"
+          },
+          "roleId": {
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "null",
+            "type": "string",
+            "description": "Role ID. This must be an existing valid Role Id from the list : \t\t\tR01,R02,R03,R04,R05",
+            "example": "_NS_"
+          }
+        },
+        "description": "USER_PROFILE"
+      },
+      "CreateUser_Response": { "type": "object" },
+      "PPBT0307CustAgrmtCrtMO_INP_PP_CUSTOMER_AGRMNT_TO": {
+        "required": [
+          "customerId",
+          "description",
+          "messageId",
+          "modificationFlag"
+        ],
+        "type": "object",
+        "properties": {
+          "description": {
+            "maxLength": 65,
+            "minLength": 1,
+            "type": "string",
+            "description": "Description of the Customer Agreement. Allowed length : String(65)"
+          },
+          "customerId": {
+            "maxLength": 8,
+            "minLength": 1,
+            "pattern": "null",
+            "type": "string",
+            "description": "Customer Id of the Customer. Allowed length : String (8)"
+          },
+          "modificationFlag": {
+            "type": "integer",
+            "description": "Operation to be done (cancellation , modification or creation) on Customer Agreement when the service is fired. Allowed length : Number (3)Allowed Values :1 -Create 2-Modify 3-Cancel",
+            "format": "int32"
+          },
+          "messageId": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "null",
+            "type": "string",
+            "description": "Message Id of the request"
+          }
+        },
+        "description": "PPBT0307CustAgrmtCrtMO_INP_PP_CUSTOMER_AGRMNT_TO"
+      },
+      "PP_CUSTOMER_AGRMNT_PPBT0307CustAgrmtCrt_Resource": {
+        "required": ["arg1"],
+        "type": "object",
+        "properties": {
+          "arg1": {
+            "$ref": "#/components/schemas/PPBT0307CustAgrmtCrtMO_INP_PP_CUSTOMER_AGRMNT_TO"
+          }
+        }
+      },
+      "PPBT0307CustAgrmtCrtMO_OUT_PPYesNoFlg_ResponseTO": {
+        "type": "object",
+        "properties": {
+          "responseCode": {
+            "type": "integer",
+            "description": "Response code of request.Allowed Length: Number(4)Allowed Values:1- Success 2- Failure",
+            "format": "int32"
+          },
+          "reasonCode": {
+            "type": "integer",
+            "description": ">Failure reason of request. Allowed length:Number (9).Allowed Values with description :10230 - Min Credit Threshold Not Met 10233 - Max Credit Threshold Exceeded 10231 - Min Debit Threshold Not Met 10232 - Max Debit Threshold Exceeded 10235 - FX Not Allowed 10229 - Volume Limit Exceeded 10228 - Amount Limit Exceeded 10234 - Multiple Limits Found 10227 - Limit Not Found 693936 : Record Already Exist",
+            "format": "int32"
+          },
+          "agreementId": {
+            "type": "integer",
+            "description": "Agreement Id of  the Customer Agreement.Allowed Length: Number(9)",
+            "format": "int32"
+          },
+          "customerUniqueIdentifier": {
+            "type": "string",
+            "description": "Customer Id of the record"
+          },
+          "messageId": { "type": "string", "description": "messageId" }
+        },
+        "description": "PPBT0307CustAgrmtCrtMO_OUT_PPYesNoFlg_ResponseTO"
+      },
+      "PP_CUSTOMER_AGRMNT_PPBT0307CustAgrmtCrt_WrappedResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PPBT0307CustAgrmtCrtMO_OUT_PPYesNoFlg_ResponseTO"
+          }
+        }
+      },
+      "PPET0312LmtUtlztnEnqryMO_INP_PP_LMT_TXN_DTLS_TO": {
+        "required": ["dimensionOneValue", "fromDate", "messageId", "toDate"],
+        "type": "object",
+        "properties": {
+          "dimensionOneValue": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "null",
+            "type": "string",
+            "description": "Customer ID for which Utilization status is required"
+          },
+          "fromDate": {
+            "type": "integer",
+            "description": "From Date in format of YYYYMMDD",
+            "format": "int32",
+            "example": -999
+          },
+          "toDate": {
+            "type": "integer",
+            "description": "Till Date in format of YYYYMMDD",
+            "format": "int32",
+            "example": -999
+          },
+          "messageId": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "Message ID"
+          }
+        },
+        "description": "PPET0312LmtUtlztnEnqryMO_INP_PP_LMT_TXN_DTLS_TO"
+      },
+      "PP_LMT_UTLZTN_DTLS_PPET0312LmtUtlztnEnqry_Resource": {
+        "type": "object",
+        "properties": {
+          "arg1": {
+            "$ref": "#/components/schemas/PPET0312LmtUtlztnEnqryMO_INP_PP_LMT_TXN_DTLS_TO"
+          }
+        }
+      },
+      "PPET0312LmtUtlztnEnqryMO_INP_PP_LMT_DTLS_ResponseTO": {
+        "type": "object",
+        "properties": {
+          "dimensionOneType": {
+            "type": "integer",
+            "description": "DMNSN_ONE_TYP",
+            "format": "int32"
+          },
+          "dimensionOneValue": {
+            "type": "string",
+            "description": "Customer ID for which utilization status is required"
+          },
+          "dimensionTwoType": {
+            "type": "integer",
+            "description": "DMNSN_TWO_TYP",
+            "format": "int32"
+          },
+          "dimensionTwoValue": {
+            "type": "string",
+            "description": "DMNSN_TWO_VAL"
+          },
+          "dimensionThreeType": {
+            "type": "integer",
+            "description": "DMNSN_THREE_TYP",
+            "format": "int32"
+          },
+          "dimensionThreeValue": {
+            "type": "string",
+            "description": "DMNSN_THREE_VAL"
+          },
+          "limitId": {
+            "type": "integer",
+            "description": "The limit set up id for the client",
+            "format": "int32"
+          },
+          "parentLimitId": {
+            "type": "integer",
+            "description": "The limit set up id for the parent of client",
+            "format": "int32"
+          },
+          "parentDimensionOneType": {
+            "type": "integer",
+            "description": "PRNT_DMNSN_ONE_TYP",
+            "format": "int32"
+          },
+          "parentDimensionOneValue": {
+            "type": "string",
+            "description": "Customer ID of parent of the requested client"
+          },
+          "parentDimensionTwoType": {
+            "type": "integer",
+            "description": "PRNT_DMNSN_TWO_TYP",
+            "format": "int32"
+          },
+          "parentDimensionTwoValue": {
+            "type": "string",
+            "description": "PRNT_DMNSN_TWO_VAL"
+          },
+          "parentDimensionThreeType": {
+            "type": "integer",
+            "description": "PRNT_DMNSN_THREE_TYP",
+            "format": "int32"
+          },
+          "parentDimensionThreeValue": {
+            "type": "string",
+            "description": "PRNT_DMNSN_THREE_VAL"
+          }
+        },
+        "description": "PPET0312LmtUtlztnEnqryMO_INP_PP_LMT_DTLS_ResponseTO"
+      },
+      "PPET0312LmtUtlztnEnqryMO_OUT_PPYesNoFlg_ResponseTO": {
+        "type": "object",
+        "properties": {
+          "messageStat": {
+            "type": "integer",
+            "description": "Enquiry Status. Success=1, Failure=2",
+            "format": "int32"
+          },
+          "messageId": { "type": "string", "description": "Message ID" }
+        },
+        "description": "PPET0312LmtUtlztnEnqryMO_OUT_PPYesNoFlg_ResponseTO"
+      },
+      "PPET0312LmtUtlztnEnqryMasterCraftVector_ResponseTO": {
+        "type": "object",
+        "properties": {
+          "limitAmount": {
+            "type": "number",
+            "description": "Daily Limit Amount defined for Client ID"
+          },
+          "utilizedAmount": {
+            "type": "number",
+            "description": "Limit amount Utilized for the value date"
+          },
+          "availableAmount": {
+            "type": "number",
+            "description": "Limit amount available for the value date"
+          },
+          "trueAvailableAmount": {
+            "type": "number",
+            "description": "True available amount for the value date"
+          },
+          "parentLimitAmount": {
+            "type": "number",
+            "description": "Daily Limit Amount defined for parent"
+          },
+          "parentUtilizedAmount": {
+            "type": "number",
+            "description": "Parent limit amount Utilized for the value date"
+          },
+          "parentAvailableAmount": {
+            "type": "number",
+            "description": "Parent limit amount available for the value date"
+          },
+          "valueDate": { "type": "string", "description": "Value date" }
+        },
+        "description": "PPET0312LmtUtlztnEnqryMasterCraftVector_ResponseTO"
+      },
+      "PP_LMT_UTLZTN_DTLS_PPET0312LmtUtlztnEnqry_WrappedResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PPET0312LmtUtlztnEnqryMO_OUT_PPYesNoFlg_ResponseTO"
+          },
+          "arg2": {
+            "$ref": "#/components/schemas/PPET0312LmtUtlztnEnqryMO_INP_PP_LMT_DTLS_ResponseTO"
+          },
+          "arg3": {
+            "type": "array",
+            "description": "PPET0312LmtUtlztnEnqryMasterCraftVector_ResponseTO",
+            "items": {
+              "$ref": "#/components/schemas/PPET0312LmtUtlztnEnqryMasterCraftVector_ResponseTO"
+            }
+          }
+        }
+      },
+      "PPBT0305VALPELmtUtilizationMO_INP_PP_LMT_TXN_DTLS_TO": {
+        "required": [
+          "amount",
+          "applicationDate",
+          "creditDebitIndicator",
+          "dimensionOneValue",
+          "messageId",
+          "source",
+          "transactionReference"
+        ],
+        "type": "object",
+        "properties": {
+          "dimensionOneValue": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "Customer ID for which limit check is required"
+          },
+          "applicationDate": {
+            "type": "integer",
+            "description": "Limit Check value date in YYYYMMDD format",
+            "format": "int32"
+          },
+          "creditDebitIndicator": {
+            "type": "integer",
+            "description": "Credit Debit Indicator. Utilization=2, Unwind =1",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Payment Amount",
+            "example": 0.0
+          },
+          "transactionReference": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "null",
+            "type": "string",
+            "description": "Transaction reference"
+          },
+          "source": {
+            "maxLength": 15,
+            "minLength": 1,
+            "pattern": "null",
+            "type": "string",
+            "description": "Source system from where the limit check request is initiated."
+          },
+          "messageId": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "null",
+            "type": "string",
+            "description": "Message Id"
+          }
+        },
+        "description": "PPBT0305VALPELmtUtilizationMO_INP_PP_LMT_TXN_DTLS_TO"
+      },
+      "PP_LMT_DTLS_PPBT0305VALPELmtUtilization_Resource": {
+        "required": ["paymentDetails"],
+        "type": "object",
+        "properties": {
+          "paymentDetails": {
+            "$ref": "#/components/schemas/PPBT0305VALPELmtUtilizationMO_INP_PP_LMT_TXN_DTLS_TO"
+          }
+        }
+      },
+      "PPBT0305VALPELmtUtilizationMO_OUT_PPYesNoFlg_ResponseTO": {
+        "type": "object",
+        "properties": {
+          "responseCode": {
+            "type": "integer",
+            "description": "Response code of request.Allowed Length: Number(4) Allowed Values: 1 - Success 2- Failure",
+            "format": "int32"
+          },
+          "reasonCode": {
+            "type": "integer",
+            "description": "Failure reason of request. Allowed length: Number (5).Allowed Values :10228 - Amount Limit Exceeded, 10234 - Multiple Limits Found, 10227 - Limit Not Found, 10236 - Customer Agreement Not Found, 10241 - Transaction with same payment reference already processed, 10278 - Transaction with duplicate message ID, 10237 - Customer Agreement not active, 10279 - Value date exceeds defined threshold, 10280 - Credit amount exceeds Utilized Amount, ",
+            "format": "int32"
+          },
+          "excs_Val": {
+            "type": "number",
+            "description": "The Excess Amount if limit breach happens"
+          },
+          "blockId": {
+            "type": "integer",
+            "description": "BLK_ID",
+            "format": "int64"
+          },
+          "customerUniqueIdentifier": {
+            "type": "string",
+            "description": "The client ID for which limit check is requested"
+          },
+          "transactionReference": {
+            "type": "string",
+            "description": "Transaction reference of the incoming request"
+          },
+          "messageId": { "type": "string", "description": "Message ID" },
+          "dimensionOneValue": {
+            "type": "string",
+            "description": "Client ID of the level at which utilization fails"
+          },
+          "utilizedAmount": {
+            "type": "number",
+            "description": "Limit amount Utilized for the requested value date"
+          },
+          "limitAmount": {
+            "type": "number",
+            "description": "Daily Limit Amount defined for Client ID"
+          }
+        },
+        "description": "PPBT0305VALPELmtUtilizationMO_OUT_PPYesNoFlg_ResponseTO"
+      },
+      "PP_LMT_DTLS_PPBT0305VALPELmtUtilization_WrappedResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PPBT0305VALPELmtUtilizationMO_OUT_PPYesNoFlg_ResponseTO"
+          }
+        }
+      },
+      "VIEW_USER_RESPONSE": {
+        "type": "object",
+        "properties": {
+          "firstName": { "type": "string", "description": "firstName" },
+          "lastName": { "type": "string", "description": "lastName" },
+          "loginId": { "type": "string", "description": "loginId" },
+          "startDt": { "type": "string", "description": "startDt" },
+          "UserStat": {
+            "type": "integer",
+            "description": "UserStat",
+            "format": "int32"
+          },
+          "roleId": {
+            "type": "array",
+            "description": "roleId",
+            "items": {
+              "$ref": "#/components/schemas/VIEW_USER_ROLEID_RESPONSE"
+            }
+          }
+        },
+        "description": "VIEW_USER_RESPONSE"
+      },
+      "VIEW_USER_ROLEID_RESPONSE": {
+        "type": "object",
+        "properties": {
+          "RoleId": { "type": "string", "description": "RoleId" }
+        },
+        "description": "roleId"
+      },
+      "ViewUser_Response": {
+        "type": "object",
+        "properties": {
+          "pageSize": {
+            "type": "integer",
+            "description": "Page Size",
+            "format": "int32"
+          },
+          "pageNum": {
+            "type": "integer",
+            "description": "Page Number",
+            "format": "int32"
+          },
+          "noOfPages": {
+            "type": "integer",
+            "description": "Number of Pages",
+            "format": "int32"
+          },
+          "totalNoOfRecords": {
+            "type": "integer",
+            "description": "Total Number of Records",
+            "format": "int32"
+          },
+          "hasNext": { "type": "string", "description": "Next Page" },
+          "VIEW_USER_RESPONSE": {
+            "type": "array",
+            "description": "VIEW_USER_RESPONSE",
+            "items": { "$ref": "#/components/schemas/VIEW_USER_RESPONSE" }
+          }
+        }
+      },
+      "VIEW_ROLE_RESPONSE": {
+        "type": "object",
+        "properties": {
+          "ROLEID": { "type": "string", "description": "Role Id" },
+          "ROLENAME": { "type": "string", "description": "Role Name" },
+          "ROLESTAT": {
+            "type": "integer",
+            "description": "Role Status : 4-Active",
+            "format": "int32"
+          },
+          "STARTDT": {
+            "type": "string",
+            "description": "Role Start Date in YYYYMMDD format. Role will be valid from this date"
+          },
+          "ENDDT": {
+            "type": "string",
+            "description": "Role End Date in YYYYMMDD format. Role will be active till this date"
+          }
+        },
+        "description": "VIEW_ROLE_RESPONSE"
+      },
+      "ViewRole_Response": {
+        "type": "object",
+        "properties": {
+          "VIEW_ROLE_RESPONSE": {
+            "type": "array",
+            "description": "VIEW_ROLE_RESPONSE",
+            "items": { "$ref": "#/components/schemas/VIEW_ROLE_RESPONSE" }
+          }
+        }
+      }
+    }
+  }
+}

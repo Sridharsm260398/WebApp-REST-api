@@ -14,9 +14,6 @@ const mysql = require('mysql')
      password: 'azure@2225146',
      database: 'store',
      port:3306,
-     waitForConnections: true,
-     connectionLimit: 10,
-     queueLimit: 0,
      ssl:{
         rejectUnauthorized:false
      }

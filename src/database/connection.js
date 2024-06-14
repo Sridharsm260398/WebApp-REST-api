@@ -29,5 +29,3 @@ const mysql = require('mysql')
 //  waitForConnections: process.env.WAITFORCONNECTIONS,
 //  connectionLimit: process.env.CONNECTIONLIMIT,
 //  queueLimit: process.env.QUEUELIMIT
-//for invoice
-module.exports = pool

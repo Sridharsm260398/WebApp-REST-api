@@ -8,16 +8,7 @@ const mysql =require('mysql2/promise')
     database: 'store'
   });
    module.exports =pool */
-  const pool = mysql.createPool({
-     host: 'mysqlfortesting.mysql.database.azure.com',
-     user: 'sridharazure',
-     password: 'azure@2225146',
-     database: 'store',
-     port:3306,
-     ssl:{
-        rejectUnauthorized:false
-     }
-   });
+
     module.exports =pool 
 //  host: process.env.HOST,
 //  user: process.env.USER,

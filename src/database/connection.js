@@ -8,17 +8,20 @@ const pool = mysql.createConnection({
     database: 'store'
   });
    module.exports =pool */
-/*   const pool = mysql.createConnection({
+  const pool = mysql.createPool({
      host: 'mysqlfortesting.mysql.database.azure.com',
      user: 'sridharazure',
      password: 'azure@2225146',
      database: 'store',
      port:3306,
+     waitForConnections: true,
+     connectionLimit: 10,
+     queueLimit: 0
      ssl:{
         rejectUnauthorized:false
      }
    });
-    module.exports =pool */
+    module.exports =pool 
 //  host: process.env.HOST,
 //  user: process.env.USER,
 //  password: process.env.PASSWORD,
@@ -27,14 +30,4 @@ const pool = mysql.createConnection({
 //  connectionLimit: process.env.CONNECTIONLIMIT,
 //  queueLimit: process.env.QUEUELIMIT
 //for invoice
-const mysql = require('mysql2/promise')
-const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'Shreyas@1998',
-  database: 'store',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
 module.exports = pool

@@ -10,8 +10,7 @@
     { "name": "Login" },
     { "name": "Signup" },
     { "name": "User Management Profile" },
-    { "name": "User Management Address" },
-    { "name": "Payment Management" }
+    { "name": "User Management Address" }
   ],
   "paths": {
     "/api/v1/users/get_profile_all": {
@@ -48,11 +47,11 @@
         "description": "Retrieve a single users.",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "query",
             "description": "Id:You will get single user details",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           }
         ],
 
@@ -84,7 +83,7 @@
         }
       }
     },
-
+    
     "/api/v1/users/delete_profile=ID": {
       "delete": {
         "tags": ["User Management Profile"],
@@ -92,11 +91,11 @@
         "description": "Delete user by ID.",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "query",
             "description": "Id:Delete user details",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           }
         ],
 
@@ -135,11 +134,11 @@
         "description": "Update user by ID.",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "query",
             "description": "Id:Update user details",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           }
         ],
         "requestBody": {
@@ -226,11 +225,11 @@
         "description": "Retrieve a single users address",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "query",
             "description": "Id:You will get single user address details with id",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           }
         ],
 
@@ -269,11 +268,11 @@
         "description": "Delete user by ID.",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "query",
             "description": "Id:You will get single user address details with id",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           }
         ],
 
@@ -313,11 +312,11 @@
         "description": "Craete user by ID.",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "query",
             "description": "Id:You will get single user address details with id",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           }
         ],
 
@@ -372,18 +371,18 @@
         "description": "Retrieve a single users address with addressId",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "query",
             "description": "Id:You will get single user address details with id",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           },
           {
             "name": "addressid",
             "in": "query",
             "description": "Id:You will get single user address details with addressId",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           }
         ],
 
@@ -422,18 +421,18 @@
         "description": "Delete user address with addressId",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "query",
             "description": "Id:You will delete single user address details with id",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           },
           {
             "name": "addressid",
             "in": "query",
             "description": "Id:You will delete user address details with addressId",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           }
         ],
 
@@ -472,18 +471,18 @@
         "description": "Update user by adressId.",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "query",
             "description": "Id:You will update user address details with id",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           },
           {
             "name": "addressid",
             "in": "query",
             "description": "Id:You will update user address details with addressId",
             "required": true,
-            "schema": { "minLength": 1, "type": "string" }
+            "schema": {  "minLength": 1, "type": "string" }
           }
         ],
 
@@ -616,168 +615,6 @@
           }
         }
       }
-    },
-    "/api/v1/users/creditdebit_get": {
-      "get": {
-        "tags": ["Payment Management"],
-        "summary": "Get all cards",
-        "description": "Retrieve a list of all cards.",
-        "responses": {
-          "200": {
-            "description": "A list of cards.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/cards"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/cards"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/users/creditdebit_post": {
-      "post": {
-        "tags": ["Payment Management"],
-        "summary": "Create a new card",
-        "description": "Creating a card.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/cards"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/cards"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Creating a card",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/cards"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/cards"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/users/get_creditdebitID": {
-      "get": {
-        "tags": ["Payment Management"],
-        "summary": "Get single card",
-        "description": "Retrieve a single card.",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "query",
-            "description": "Id:You will get single user card details",
-            "required": true,
-            "schema": { "minLength": 1, "type": "string" }
-          }
-        ],
-
-        "responses": {
-          "200": {
-            "description": "A list of cards for single user.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/cards"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/cards"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "card not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/api/v1/users/delete_creditdebitID": {
-      "delete": {
-        "tags": ["Payment Management"],
-        "summary": "Delete single card",
-        "description": "Delete a single card.",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "query",
-            "description": "User Id:You will Delete single user card details",
-            "required": true,
-            "schema": { "minLength": 1, "type": "string" }
-          },
-            {
-              "name": "card_id",
-              "in": "query",
-              "description": "Card Id:You will Delete single user card details",
-              "required": true,
-              "schema": { "minLength": 1, "type": "string" }
-            }
-        ],
-
-        "responses": {
-          "200": {
-            "description": "Delete card for single user.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/cards"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/cards"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "card not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
     }
   },
   "components": {
@@ -869,6 +706,10 @@
       "address": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "description": "Same Id what is given in Param query"
+          },
           "first_name": {
             "type": "string",
             "description": "The First Name"
@@ -908,31 +749,6 @@
           "address_optional": {
             "type": "string",
             "description": "The Optional Address Details"
-          }
-        }
-      },
-      "cards": {
-        "type": "object",
-        "properties": {
-          "user_id": {
-            "type": "string",
-            "description": "Same Id what is given in Param query"
-          },
-          "card_holder_name": {
-            "type": "string",
-            "description": "The Card Holder Name"
-          },
-          "card_number": {
-            "type": "string",
-            "description": "The Card Number"
-          },
-          "cvv": {
-            "type": "string",
-            "description": "The CVV of Card"
-          },
-          "expiry_date": {
-            "type": "string",
-            "description": "The Expairy Date of Card"
           }
         }
       }

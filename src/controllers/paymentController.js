@@ -1,92 +1,89 @@
 const pool = require('../database/connection');
-exports.getCreditDebit = (req, res) => {
-  pool.query('SELECT * FROM savedcards', (err, rows) => {
-    if (err) throw err;
-    res.status(200).json({
-      status: 'Success',
-      result: rows.length,
-      data: rows.rows,
-    });
-  });
+exports.getCreditDebit = async (req, res) => {
+ try {
+   const [rows]   = await pool.query('SELECT * FROM savedcards');
+   res.status(200).json({
+     status: 'Success',
+     result: rows.length,
+     data: rows,
+   });
+ } catch (err) {
+  console.log(err)
+   res.status(500).json({ message: 'Internal Server Error' });
+ }
 };
-exports.getCreditDebitWithID = (req, res) => {
-  const { id } = req.query;
-  //const { card_holder_name, card_number, cvv, expiry_date } = req.body;
-  pool.query('SELECT * from  savedcards WHERE id = ?', [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
-    if (result.length == 0) {
-      console.log(result);
-      return res.status(400).json({ error: 'Card not found for User' });
-    }
-    res.status(200).json({
-      status:"success",
-      message: 'Card fetched successful!',
-      data: result,
-    });
-  });
+exports.getCreditDebitWithID = async (req, res) => {
+ const { user_id } = req.query;
+ try {
+   const [rows] = await pool.query('SELECT * from  savedcards WHERE user_id = ?', [user_id]);
+   if (rows.length === 0) {
+     return res.status(400).json({ error: 'Card not found for User' });
+   }
+   res.status(200).json({
+     status: "success",
+     message: 'Card fetched successful!',
+     data: rows,
+   });
+ } catch (err) {
+   res.status(500).json({ message: 'Internal Server Error' });
+ }
 };
-exports.deleteCreditDebitWithCID = (req, res) => {
-  const { card_id, id } = req.query;
-  pool.query(
-    'SELECT * FROM savedcards where id =? and card_id =?',
-    [id, card_id],
-    (error, userResults) => {
-      if (error) {
-        console.error('Error checking existing card:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
-      if (userResults.length === 0) {
-        return res.status(404).json({ error: 'Card not found' });
-      }
-      pool.query(
-        'DELETE from savedcards where id =? and card_id =?',
-        [id,card_id],
-        (err, result) => {
-          if (err) {
-            return res.status(500).json({ message: 'Internal Server Error' });
-          }
-          res.status(200).json({
-            status:"success",
-            message: 'Card deleted successful!',
-          });
-        }
-      );
-    }
-  );
+exports.deleteCreditDebitWithCID = async (req, res) => {
+ const { card_id, user_id } = req.query;
+ try {
+   const userResults = await pool.query('SELECT * FROM savedcards where user_id =? and card_id =?', [user_id, card_id]);
+   if (userResults.length === 0) {
+     return res.status(404).json({ error: 'Card not found' });
+   }
+   await pool.query('DELETE from savedcards where user_id =? and card_id =?', [user_id, card_id]);
+   res.status(200).json({
+     status: "success",
+     message: 'Card deleted successful!',
+   });
+ } catch (err) {
+   res.status(500).json({ message: 'Internal Server Error' });
+ }
 };
-exports.addCreditDebit = (req, res) => {
-  const { card_holder_name, card_number, cvv, expiry_date, id } = req.body;
-
-  pool.query(
-    'SELECT * FROM savedcards WHERE card_number = ?',
-    [card_number],
-    (error, emailResults) => {
-      if (error) {
-        console.error('Error checking existing Card number:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
-
-      if (emailResults.length > 0) {
-        return res.status(400).json({ error: 'Card number already exist' });
-      }
-
-      const values = [card_holder_name, card_number, cvv, expiry_date, id];
-       pool.query('INSERT INTO savedcards set ?',req.body, 
-        (err, result) => {
-          if (err) {
-            console.error('Error creating user:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-          }
-
-          res.status(200).json({
-            status: 'success',
-            message: 'Card added successfully',
-            data: req.body,
-          });
-        }
-      );
-    }
-  );
+exports.addCreditDebit = async (req, res) => {
+ const { card_holder_name, card_number, cvv, expiry_date, user_id } = req.body;
+ try {
+   const userResults = await pool.query('SELECT * FROM savedcards where user_id = ?', [user_id]);
+   if (userResults.length >= 5) {
+     return res.status(400).json({
+       error: 'Not able to add',
+       message: 'Cards can be added up to 5. Please delete the existing cards and try to add.',
+     });
+   }
+   const [emailResults] = await pool.query('SELECT * FROM savedcards WHERE card_number = ?', [card_number]);
+   console.log(emailResults)
+   if (emailResults.length > 0) {
+    console.log(emailResults.length)
+     return res.status(400).json({ error: 'Card number already exists' });
+   }
+   const values = [card_holder_name, card_number, cvv, expiry_date, user_id];
+   await pool.query(
+     'INSERT INTO savedcards ( card_holder_name ,card_number , cvv,  expiry_date ,user_id) VALUES(?,?,?,?,?)',
+     values
+   );
+   res.status(201).json({
+     status: 'success',
+     message: 'Card added successfully',
+     data: req.body,
+   });
+ } catch (error) {
+  console.error('Error adding Card:', error);
+  if(error.constraint =='savedcards_card_number_check'){
+    error.message ='Entre correct Card Number, format Number:{XXXXXXXXXXX12} Size:12 digit';
+  }
+  else if(error.constraint =='savedcards_cvv_check'){
+    error.message ='Entre correct Card CVV, format Number:{XXX} ';
+  }
+ else if(error.constraint =='savedcards_expiry_date_check'){
+    error.message ='Entre correct Card Expiry Date, format Number:{MM/YY} ';
+  }else{
+    error.message = 'Internal Server Error' ;
+  }
+   res.status(500).json({ message: `${error.message}`});
+   //res.status(500).json({ message: 'Internal Server Error' });
+ }
 };

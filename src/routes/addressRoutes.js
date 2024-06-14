@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const addressController = require('../controllers/addressController');
-router.route('/post_address').post(addressController.createaddress);
-router.route('/get_address').get(addressController.getALLUserAddress);
-router.route('/get_address=ID').get(addressController.getSingleUserAddress);
+router.route('/post_address').post(addressController.createAddress);
+router.route('/get_address').get(addressController.getAllUserAddresses);
+router.route('/get_address=ID').get(addressController.getUserAddressById);
 router.route('/delete_address=ID').delete(addressController.deleteUserAddresswithId);
 router.route('/get_single_address=aid').get(addressController.getSingleUserAddresswithAddressID);
 router.route('/delete_single_address=aid').delete(addressController.deleteUserAddresswithAddressID);

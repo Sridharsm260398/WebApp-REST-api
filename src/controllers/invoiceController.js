@@ -1,81 +1,94 @@
 const pool = require('../database/connection');
 const PDFDocument = require('pdfkit');
 const { generateInvoice } = require('../generators/invoiceGenerator');
-const fs = require('fs');
+
 exports.postInvoice = async (req, res) => {
   const { order, items } = req.body;
-
-  let connection;
+  const client = await pool.getConnection()
   try {
-    connection = await pool.getConnection();
-    await connection.beginTransaction();
-
+    await client.query('BEGIN');
     const orderQuery = `
-      INSERT INTO orders (
-        order_id, invoice_no, order_date, invoice_date, sold_by_name, sold_by_address, sold_by_registered_address, 
-        shipping_address, billing_address, total_qty, total_price, declaration
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-    
+        INSERT INTO orders (
+          user_id,order_id, invoice_no, order_date, invoice_date, sold_by_name, sold_by_address, sold_by_registered_address,
+          shipping_address, billing_address, total_qty, total_price, declaration
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?) 
+      `;
     const orderValues = [
-      order.order_id, order.invoice_no, order.order_date, order.invoice_date, order.sold_by_name, order.sold_by_address,
-      order.sold_by_registered_address, order.shipping_address, order.billing_address, order.total_qty, order.total_price, order.declaration
+      order.user_id,
+      order.order_id,
+      order.invoice_no,
+      order.order_date,
+      order.invoice_date,
+      order.sold_by_name,
+      order.sold_by_address,
+      order.sold_by_registered_address,
+      order.shipping_address,
+      order.billing_address,
+      order.total_qty,
+      order.total_price,
+      order.declaration,
     ];
-    
-    const [orderResult] = await connection.execute(orderQuery, orderValues);
-    const savedOrder = { ...order, id: orderResult.insertId };
-
+    const [orderResult] = await client.query(orderQuery, orderValues);
+    const savedOrder = orderResult[0];
+    //console.log(order)
     const itemsQuery = `
-      INSERT INTO order_items (
-        order_id, product, description, qty, gross_amount, discount, taxable_value, igst, total
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-    
+        INSERT INTO order_items (
+          order_id, user_id,product, description, qty, gross_amount, discount, taxable_value, igst, total
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+      `;
     for (const item of items) {
       const itemValues = [
-        savedOrder.order_id, item.product, item.description, item.qty, item.gross_amount, item.discount,
-        item.taxable_value, item.igst, item.total
+        order.order_id,
+        order.user_id,
+        item.product,
+        item.description,
+        item.qty,
+        item.gross_amount,
+        item.discount,
+        item.taxable_value,
+        item.igst,
+        item.total,
       ];
-      await connection.execute(itemsQuery, itemValues);
+      await client.query(itemsQuery, itemValues);
     }
-
-    await connection.commit();
-    res.status(201).json(savedOrder);
+    await client.query('COMMIT');
+    res.status(201).json({ Status: 'Sucess', messsage: 'Order Placed Successfully!!', data: order });
   } catch (error) {
-    if(connection)
-    await connection.rollback();
+    await client.query('ROLLBACK');
     console.error('Error saving order:', error);
-    res.status(500).send('Error saving order');
+    console.error('Stack trace:', error.stack);
+    res.status(400).json({ message: 'Failed', errorMessageList: {error:error} });
+   // res.status(500).send('Error saving order');
   } finally {
-    if(connection)
-    connection.release();
+    client.release();
   }
 };
-exports.getInvoice =  async (req, res) => {
+
+exports.getInvoice = async (req, res) => {
   const orderId = req.params.orderId;
-
   try {
-    const [orderResult] = await pool.query('SELECT * FROM orders WHERE order_id = ?', [orderId]);
-    const orderData = orderResult[0];
-    const [itemsResult] = await pool.query('SELECT * FROM order_items WHERE order_id = ?', [orderId]);
-    const itemsData = itemsResult;
-
+    const orderQuery = 'SELECT * FROM orders WHERE order_id = ?';
+    const [orderData] = await pool.query(orderQuery, [orderId]);
+    //const orderData = orderResult;
+    const itemsQuery = 'SELECT * FROM order_items WHERE order_id = ?';
+    const [itemsData] = await pool.query(itemsQuery, [orderId]);
+   // const itemsData = itemsResult;
     if (!orderData || itemsData.length === 0) {
       return res.status(404).send('Order not found');
     }
     const invoiceData = {
-      orderId: orderData.order_id,
-      invoiceNo: orderData.invoice_no,
-      orderDate: orderData.order_date.toISOString(),
-      invoiceDate: orderData.invoice_date.toISOString(),
+      orderId: orderData[0].order_id,
+      invoiceNo: orderData[0].invoice_no,
+      orderDate: orderData[0].order_date,
+      invoiceDate: orderData[0].invoice_date,
       soldBy: {
-        name: orderData.sold_by_name,
-        address: orderData.sold_by_address,
-        registeredAddress: orderData.sold_by_registered_address,
+        name: orderData[0].sold_by_name,
+        address: orderData[0].sold_by_address,
+        registeredAddress: orderData[0].sold_by_registered_address,
       },
-      shippingAddress: orderData.shipping_address,
-      billingAddress: orderData.billing_address,
-      items: itemsData.map(item => ({
+      shippingAddress: orderData[0].shipping_address,
+      billingAddress: orderData[0].billing_address,
+      items: itemsData.map((item) => ({
         product: item.product,
         description: item.description,
         qty: item.qty,
@@ -90,27 +103,24 @@ exports.getInvoice =  async (req, res) => {
       declaration: orderData.declaration,
     };
     const doc = new PDFDocument();
-    res.setHeader('Content-Disposition', `attachment; filename=invoice_${orderId}.pdf`);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=invoice_${orderId}.pdf`
+    );
     res.setHeader('Content-Type', 'application/pdf');
-    
     doc.pipe(res);
     generateInvoice(doc, invoiceData);
     doc.end();
-/*   const doc = new PDFDocument();
-  const stream = res.writeHead(200, {
-    'Content-Type': 'application/pdf',
-    'Content-Disposition': 'attachment; filename=invoice.pdf'
-  }); */
-
-/*   doc.pipe(stream);
-  generateInvoice(doc, data);
-  doc.end(); */
+    /*  return res.status(201).json({
+      message: 'Success',
+      orderRes: orderResult.rows[0],
+      itemRes: itemsResult.rows,
+    }); */
   } catch (error) {
     console.error('Error generating invoice:', error);
     res.status(500).send('Error generating invoice');
   }
-}
-
+};
 /* function generateInvoice(invoiceData) {
  const doc = new PDFDocument({ margin: 50 });
  // Header
@@ -180,11 +190,11 @@ module.exports = generateInvoice; */
     const orderId = req.params.orderId;
     try {
       // Fetch order details
-      const orderQuery = 'SELECT * FROM orders WHERE order_id = $1';
+      const orderQuery = 'SELECT * FROM orders WHERE order_id = ?';
       const orderResult = await pool.query(orderQuery, [orderId]);
       const orderData = orderResult.rows[0];
       // Fetch order items
-      const itemsQuery = 'SELECT * FROM order_items WHERE order_id = $1';
+      const itemsQuery = 'SELECT * FROM order_items WHERE order_id = ?';
       const itemsResult = await pool.query(itemsQuery, [orderId]);
       const itemsData = itemsResult.rows;
       if (!orderData || itemsData.length === 0) {
@@ -232,7 +242,7 @@ module.exports = generateInvoice; */
     const orderId = req.params.orderId;
     try {
       // Retrieve invoice data from the database
-      const query = 'SELECT * FROM invoices WHERE order_id = $1';
+      const query = 'SELECT * FROM invoices WHERE order_id = ?';
       const values = [orderId];
       const result = await pool.query(query, values);
       const invoiceData = result.rows[0];

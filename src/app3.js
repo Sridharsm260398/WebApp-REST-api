@@ -256,7 +256,7 @@ const pool = new Pool({
 app.get('/fetch-products', async (req, res) => {
  try {
    const checkQuery = 'SELECT COUNT(*) AS count FROM products';
-   const { rows } = await pool.query(checkQuery);
+   const [rows] = await pool.query(checkQuery);
    const productCount = rows[0].count;
 
    if (productCount > 0) {
@@ -280,7 +280,7 @@ app.get('/fetch-products', async (req, res) => {
 
    const insertQuery = `
      INSERT INTO products (id, title, price, description, category, image, rate, count)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
      ON CONFLICT (id) DO UPDATE SET
        title = EXCLUDED.title,
        price = EXCLUDED.price,
@@ -321,7 +321,7 @@ const pool = new Pool({
 app.get('/fetch-products', async (req, res) => {
  try {
    const checkQuery = 'SELECT COUNT(*) AS count FROM products';
-   const { rows } = await pool.query(checkQuery);
+   const [rows] = await pool.query(checkQuery);
    const productCount = rows[0].count;
    if (productCount > 0) {
      res.status(200).send('Products already exist in the database');
@@ -341,7 +341,7 @@ app.get('/fetch-products', async (req, res) => {
    ]);
    const insertQuery = `
      INSERT INTO products (id, title, price, description, category, image, rate, count)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
      ON CONFLICT (id) DO UPDATE SET
        title = EXCLUDED.title,
        price = EXCLUDED.price,
@@ -367,7 +367,7 @@ app.listen(3000, () => {
 app.get('/fetch-products', async (req, res) => {
   try {
     const checkQuery = 'SELECT COUNT(*) AS count FROM products';
-    const { rows } = await pool.query(checkQuery);
+    const [rows] = await pool.query(checkQuery);
     const productCount = rows[0].count;
     if (productCount > 0) {
       res.status(200).send('Products already exist in the database');
@@ -395,7 +395,7 @@ app.get('/fetch-products', async (req, res) => {
     ]);
     const insertQuery = `
       INSERT INTO products (id, title, price, description, category, image, rate, count)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT (id) DO UPDATE SET
         title = EXCLUDED.title,
         price = EXCLUDED.price,

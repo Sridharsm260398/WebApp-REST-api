@@ -1,124 +1,113 @@
 const pool = require('../database/connection');
 
-exports.createaddress = (req, res) => {
-  pool.query('INSERT INTO UserAddress SET ?', req.body, (err, result) => {
-    if (err) {
-      console.error("Error creating address:", err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+exports.createAddress = async (req, res) => {
+  const {
+    first_name,
+    last_name,
+    locality,
+    town_city,
+    country,
+    state,
+    postcode_zip,
+    mobile,
+    email_address,
+    address_optional,
+    user_id,
+  } = req.body;
+  const values = [
+    first_name,
+    last_name,
+    locality,
+    town_city,
+    country,
+    state,
+    postcode_zip,
+    mobile,
+    email_address,
+    address_optional,
+    user_id,
+  ];
+  try {
+    const [userResults] = await pool.query(
+      'SELECT * FROM useraddress WHERE user_id = ?',
+      [user_id]
+    );
+    if (userResults.length >= 5) {
+      return res.status(400).json({
+        error: 'Not able to add',
+        message:
+          'Address can be added up to 5. Please delete or modify the existing address',
+      });
     }
-
+    await pool.query(
+      'INSERT INTO useraddress (first_name, last_name, locality, town_city, country, state, postcode_zip, mobile, email_address, address_optional, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      values
+    );
     res.status(201).json({
       status: 'success',
       message: 'Address created successfully',
       data: req.body,
     });
-  });
+  } catch (error) {
+    console.error('Error creating address:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
-exports.getALLUserAddress = (req, res) => {
-  pool.query('SELECT * FROM UserAddress', (error, userResults) => {
-    if (error) {
-      console.error("Error fetching addresses:", error);
-      return res.status(500).json({ error: 'Internal Server Error' });
+exports.getAllUserAddresses = async (req, res) => {
+  try {
+    const [userResults] = await pool.query('SELECT * FROM useraddress');
+    if (userResults.length === 0) {
+      return res.status(404).json({ error: 'No addresses found' });
     }
-
     res.status(200).json({
       status: 'success',
       data: userResults,
     });
-  });
+  } catch (error) {
+    console.error('Error fetching addresses:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
-exports.getSingleUserAddress = (req, res) => {
-  const { id } = req.query;
-  pool.query('SELECT * FROM UserAddress WHERE id = ?', [id], (error, userResults) => {
-    if (error) {
-      console.error("Error fetching address:", error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-
+exports.getUserAddressById = async (req, res) => {
+  const { user_id } = req.query;
+  try {
+    const [userResults] = await pool.query(
+      'SELECT * FROM useraddress WHERE user_id = ?',
+      [user_id]
+    );
     if (userResults.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Address not found' });
     }
-
     res.status(200).json({
       status: 'success',
       data: userResults,
     });
-  });
+  } catch (error) {
+    console.error('Error fetching address:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
-
-exports.getSingleUserAddresswithAddressID = (req, res) => {
-  const { id, addressid } = req.query;
-  pool.query('SELECT * FROM UserAddress WHERE id = ? AND addressid = ?', [id, addressid], (error, userResults) => {
-    if (error) {
-      console.error("Error fetching address:", error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-
+exports.deleteUserAddresswithId = async (req, res) => {
+  const { user_id } = req.query;
+  try {
+    const [userResults] = await pool.query('SELECT * FROM useraddress WHERE user_id = ?', [user_id]);
     if (userResults.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Address not found' });
     }
-
+    await pool.query('DELETE FROM useraddress WHERE user_id = ?', [user_id]);
     res.status(200).json({
       status: 'success',
-      data: userResults,
+      message: 'User address deleted successfully',
     });
-  });
-};
-
-exports.deleteUserAddresswithId = (req, res) => {
-  const { id } = req.query;
-  pool.query('SELECT * FROM UserAddress WHERE id = ?', [id], (error, userResults) => {
-    if (error) {
-      console.error("Error checking existing user:", error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    if (userResults.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    pool.query('DELETE FROM UserAddress WHERE id = ?', [id], (err, result) => {
-      if (err) {
-        console.error("Error deleting user:", err);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
-
-      res.status(200).json({
-        status: 'success',
-        message: 'User address deleted successfully',
-      });
-    });
-  });
-};
-
-exports.deleteUserAddresswithAddressID = (req, res) => {
-  const { id, addressid } = req.query;
-  pool.query('SELECT * FROM UserAddress WHERE id = ? AND addressid = ?', [id, addressid], (error, userResults) => {
-    if (error) {
-      console.error("Error checking existing user:", error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    if (userResults.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    pool.query('DELETE FROM UserAddress WHERE id = ? AND addressid = ?', [id, addressid], (err, result) => {
-      if (err) {
-        console.error("Error deleting user:", err);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
-
-      res.status(200).json({
-        status: 'success',
-        message: 'User address deleted successfully',
-      });
-    });
-  });
-};
-
-exports.updateUserAddresswithAddressID = (req, res) => {
-  const { id, addressid } = req.query;
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+ };
+exports.updateUserAddresswithAddressID = async (req, res) => {
+  const { user_id, addressid } = req.query;
   const {
     first_name,
     last_name,
@@ -131,20 +120,18 @@ exports.updateUserAddresswithAddressID = (req, res) => {
     email_address,
     address_optional,
   } = req.body;
-
-  pool.query(
-    'SELECT * FROM UserAddress WHERE id = ? AND addressid = ?',
-    [id, addressid],
-    (error, userResults) => {
-      if (error) {
-        console.error('Error checking existing user:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
-      if (userResults.length === 0) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-
-      const values = [
+  try {
+    const [userResults] = await pool.query(
+      'SELECT * FROM useraddress WHERE user_id = ? AND addressid = ?',
+      [user_id, addressid]
+    );
+    if (userResults.length === 0) {
+      return res.status(404).json({ error: 'Address not found' });
+    }
+  
+    await pool.query(
+      'UPDATE useraddress SET first_name=?, last_name=?, locality=?, town_city=?, country=?, state=?, postcode_zip=?, mobile=?, email_address=?, address_optional=? WHERE user_id = ? AND addressid = ?',
+      [
         first_name,
         last_name,
         locality,
@@ -155,28 +142,51 @@ exports.updateUserAddresswithAddressID = (req, res) => {
         mobile,
         email_address,
         address_optional,
-        id,
-        addressid
-      ];
+        user_id,
+        addressid,
+      ]
+    );
 
-      pool.query(
-        `UPDATE UserAddress 
-         SET first_name=?, last_name=?, locality=?, town_city=?, country=?, state=?, postcode_zip=?, mobile=?, email_address=?, address_optional=?
-         WHERE id = ? AND addressid = ?`,
-        values,
-        (err, result) => {
-          if (err) {
-            console.error('Error updating user:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-          }
-
-          res.status(200).json({
-            status: 'success',
-            message: 'User address updated successfully',
-            data: req.body
-          });
-        }
-      );
-    }
-  );
+    res.status(200).json({
+      status: 'success',
+      message: 'User address updated successfully',
+      data: req.body,
+    });
+  } catch (error) {
+    console.error('Error updating user address:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
+
+ exports.getSingleUserAddresswithAddressID = async (req, res) => {
+  const { user_id, addressid } = req.query;
+  try {
+    const [userResults] = await pool.query('SELECT * FROM useraddress WHERE user_id = ? AND addressid = ?', [user_id, addressid]);
+    if (userResults.length === 0) {
+      return res.status(404).json({ error: 'Address not found' });
+    }
+    res.status(200).json({
+      status: 'success',
+      data: userResults[0],
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+ };
+ exports.deleteUserAddresswithAddressID = async (req, res) => {
+  const { user_id, addressid } = req.query;
+  try {
+    const [userResults] = await pool.query('SELECT * FROM useraddress WHERE user_id = ? AND addressid = ?', [user_id, addressid]);
+    if (userResults.length === 0) {
+      return res.status(404).json({ error: 'Address not found' });
+    }
+    await pool.query('DELETE FROM useraddress WHERE user_id = ? and addressid =?', [user_id, addressid]);
+    res.status(200).json({
+      status: 'success',
+      message: 'User address deleted successfully',
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+ };

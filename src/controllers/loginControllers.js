@@ -1,25 +1,32 @@
 const pool = require('../database/connection');
+const bcrypt = require('bcryptjs');
 
-exports.loginUser = (req, res) => {
+exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
-
-  pool.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (error, results) => {
-    if (error) {
-      console.error("Error checking user credentials:", error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-
+  try {
+    const [results] = await pool.query('SELECT * FROM users WHERE email = ?', [
+      email,
+    ]);
+   
     if (results.length === 0) {
-      console.log("Invalid email or password:", email);
+      console.log('Invalid email or password:', email);
       return res.status(400).json({ error: 'Invalid email or password' });
     }
-
-    console.log("User logged in successfully:", email);
+   const user = results;
+   console.log(user[0].password)
+     const isPasswordMatch = await bcrypt.compare(password, user[0].password);
+    if (!isPasswordMatch) {
+      console.log('Invalid email or password:', email);
+      return res.status(400).json({ error: 'Invalid email or password' });
+    }
+    console.log('User logged in successfully:', email);
     res.status(200).json({
       status: 'success',
       message: 'User logged in successfully',
-      data: results[0]
-
+      data: { id: user[0].user_id },
     });
-  });
+  } catch (error) {
+    console.error('Error checking user credentials:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };

@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config({ path: './src/config.env' })
-/* const mysql = require('mysql')
-const pool = mysql.createConnection({
+const mysql = require('mysql')
+/* const pool = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'Shreyas@1998',
